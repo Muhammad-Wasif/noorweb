@@ -25,9 +25,11 @@ export default function SurahReaderPage() {
   const [showSidebar, setShowSidebar] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentReciter, setCurrentReciter] = useState(reciters[0])
+  const [currentAyah, setCurrentAyah] = useState<number | null>(null)
 
   const { bookmarks, addBookmark, removeBookmark, isBookmarked } = useBookmarks()
   const audioRef = useRef<HTMLAudioElement | null>(null)
+  const ayahRefs = useRef<{ [key: number]: HTMLDivElement | null }>({})
 
   useEffect(() => {
     async function fetchSurah() {
@@ -46,8 +48,20 @@ export default function SurahReaderPage() {
 
     if (surahNumber >= 1 && surahNumber <= 114) {
       fetchSurah()
+      setCurrentAyah(null)
+      setIsPlaying(false)
     }
   }, [surahNumber])
+
+  // Scroll to current ayah
+  useEffect(() => {
+    if (currentAyah !== null && ayahRefs.current[currentAyah]) {
+      ayahRefs.current[currentAyah]?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      })
+    }
+  }, [currentAyah])
 
   const toggleBookmark = (ayahNumber: number, arabicText: string, urduText: string) => {
     if (isBookmarked(surahNumber, ayahNumber)) {
@@ -82,6 +96,40 @@ export default function SurahReaderPage() {
     }
   }
 
+  const playAyah = async (ayahNumber: number) => {
+    if (currentAyah === ayahNumber && isPlaying) {
+      audioRef.current?.pause()
+      setIsPlaying(false)
+      return
+    }
+
+    setCurrentAyah(ayahNumber)
+    setIsPlaying(true)
+
+    const absoluteAyahNumber = arabicData?.ayahs.find(a => a.numberInSurah === ayahNumber)?.number
+
+    if (absoluteAyahNumber) {
+      const url = `https://cdn.islamic.network/quran/audio/128/${currentReciter.identifier}/${absoluteAyahNumber}.mp3`
+      if (audioRef.current) {
+        audioRef.current.src = url
+        audioRef.current.play().catch(err => {
+          console.error("Playback failed:", err)
+          toast.error("آڈیو چلانے میں مسئلہ")
+          setIsPlaying(false)
+        })
+      }
+    }
+  }
+
+  const handleAudioEnded = () => {
+    if (currentAyah !== null && arabicData && currentAyah < arabicData.numberOfAyahs) {
+      playAyah(currentAyah + 1)
+    } else {
+      setIsPlaying(false)
+      setCurrentAyah(null)
+    }
+  }
+
   if (loading) {
     return (
       <main className="min-h-screen flex items-center justify-center">
@@ -104,11 +152,19 @@ export default function SurahReaderPage() {
   return (
     <main dir="ltr" className={`min-h-screen ${isDarkMode ? 'dark bg-gray-900 text-white' : 'bg-gradient-to-br from-white to-primary-light/30'}`}>
       <SectionMenu />
+      <audio
+        ref={audioRef}
+        onEnded={handleAudioEnded}
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
+      />
 
       {/* Top Bar */}
       <header className="fixed top-0 left-0 right-0 z-40 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
+            {/* Added spacer for global menu button on mobile */}
+            <div className="w-12 lg:hidden" />
             <button
               onClick={() => setShowSidebar(!showSidebar)}
               className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg lg:hidden"
@@ -234,23 +290,36 @@ export default function SurahReaderPage() {
             {arabicData.ayahs.map((ayah, index) => {
               const translation = translationData.ayahs[index]
               const bookmarked = isBookmarked(surahNumber, ayah.numberInSurah)
+              const isActive = currentAyah === ayah.numberInSurah
 
               return (
                 <motion.div
                   key={ayah.numberInSurah}
+                  ref={(el) => { ayahRefs.current[ayah.numberInSurah] = el }}
                   initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                    backgroundColor: isActive ? 'rgba(212, 175, 55, 0.05)' : ''
+                  }}
                   transition={{ delay: Math.min(index * 0.02, 0.5) }}
-                  className="bg-card dark:bg-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow"
+                  className={`bg-card dark:bg-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all border-2 ${isActive ? 'border-gold shadow-lg ring-1 ring-gold/20' : 'border-transparent'}`}
                 >
                   {/* Ayah Number Badge */}
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
-                      <span className="w-10 h-10 bg-primary/10 text-primary rounded-full flex items-center justify-center font-bold">
+                      <span className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-colors ${isActive ? 'bg-gold text-white' : 'bg-primary/10 text-primary'}`}>
                         {ayah.numberInSurah}
                       </span>
                     </div>
                     <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => playAyah(ayah.numberInSurah)}
+                        className={`p-2 rounded-lg transition-colors ${isActive && isPlaying ? 'text-primary bg-primary/10' : 'hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+                        title={isActive && isPlaying ? "Pause" : "Play"}
+                      >
+                        {isActive && isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
+                      </button>
                       <button
                         onClick={() => toggleBookmark(ayah.numberInSurah, ayah.text, translation?.text || '')}
                         className={`p-2 rounded-lg transition-colors ${bookmarked ? 'text-gold bg-gold/10' : 'hover:bg-gray-100 dark:hover:bg-gray-700'}`}
@@ -274,7 +343,7 @@ export default function SurahReaderPage() {
 
                   {/* Arabic Text */}
                   <p
-                    className="font-amiri text-gray-800 dark:text-gray-200 leading-loose rtl mb-4"
+                    className={`font-amiri leading-loose rtl mb-4 transition-colors duration-500 ${isActive ? 'text-gold' : 'text-gray-800 dark:text-gray-200'}`}
                     style={{ fontSize: `${fontSize}px`, lineHeight: 2.2 }}
                   >
                     {ayah.text}
@@ -283,7 +352,7 @@ export default function SurahReaderPage() {
 
                   {/* Translation */}
                   {translation && (
-                    <p className="font-nastaliq text-gray-600 dark:text-gray-400 text-lg leading-relaxed rtl">
+                    <p className={`font-nastaliq text-lg leading-relaxed rtl transition-colors duration-500 ${isActive ? 'text-gold/80' : 'text-gray-600 dark:text-gray-400'}`}>
                       {translation.text}
                     </p>
                   )}
