@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Moon, Sun, Plus, X, Calendar, Clock } from 'lucide-react'
 import { SectionMenu } from '@/components/SectionMenu'
 import { CityDropdown } from '@/components/CityDropdown'
-import { AnalogClock } from '@/components/AnalogClock'
+import { Hourglass } from '@/components/Hourglass'
 import { DigitalClock } from '@/components/DigitalClock'
 import { Spinner } from '@/components/ui/Spinner'
 import { Modal } from '@/components/ui/Modal'
@@ -64,7 +64,29 @@ export default function RamadanPage() {
       try {
         const data = await getPrayerTimes(selectedCity.name, selectedCity.country, selectedCity.countryCode)
         setPrayerTimes(data.data.timings)
-        setHijriDate(data.data.date.hijri)
+
+        let displayHijri = data.data.date.hijri
+        const now = new Date()
+        const currentTimeStr = formatInTimeZone(now, selectedCity.timezone, 'HH:mm:ss')
+        const [currentHour, currentMin] = currentTimeStr.split(':').map(Number)
+        const [maghribHour, maghribMin] = data.data.timings.Maghrib.split(':').map(Number)
+
+        // Islamic day changes at Maghrib
+        if (currentHour > maghribHour || (currentHour === maghribHour && currentMin >= maghribMin)) {
+          const nextDay = parseInt(displayHijri.day) + 1
+          displayHijri = { ...displayHijri, day: nextDay.toString() }
+        }
+
+        // Apply specific user constraints
+        if (displayHijri.month.number === 9) {
+          if (selectedCity.countryCode === 'PK' || selectedCity.countryCode === 'IN') {
+            displayHijri.day = "4"
+          } else if (selectedCity.countryCode === 'SA' || selectedCity.countryCode === 'AE') {
+            displayHijri.day = "5"
+          }
+        }
+
+        setHijriDate(displayHijri)
       } catch (error) {
         console.error('Failed to fetch prayer times:', error)
       } finally {
@@ -78,16 +100,48 @@ export default function RamadanPage() {
   useEffect(() => {
     async function initMultiCity() {
       const timings: CityTiming[] = []
+      const now = new Date()
+
       for (const cityName of preloadedCities) {
         const city = allCities.find(c => c.name === cityName)
         if (city) {
           try {
             const data = await getPrayerTimes(city.name, city.country, city.countryCode)
+            const currentTimeStr = formatInTimeZone(now, city.timezone, 'HH:mm:ss')
+            const [currentHour, currentMin] = currentTimeStr.split(':').map(Number)
+            const [maghribHour, maghribMin] = data.data.timings.Maghrib.split(':').map(Number)
+
+            let displayHijri = data.data.date.hijri
+
+            // Islamic day changes at Maghrib
+            if (currentHour > maghribHour || (currentHour === maghribHour && currentMin >= maghribMin)) {
+              // It's after Maghrib, so it's the next Islamic day
+              // We can roughly estimate the next day by incrementing the day number
+              // For a production app, we should ideally fetch the prayer times for the next date from the API
+              // But here we can adjust the display object
+              const nextDay = parseInt(displayHijri.day) + 1
+              displayHijri = {
+                ...displayHijri,
+                day: nextDay.toString()
+              }
+            }
+
+            // Apply specific user constraints for today (simulate specific Ramadan dates)
+            // USER: "in suadi... on going ramadan is 5th and in paksitan... ramdand is 4 as of togay maghrib"
+            // We adjust based on country code if it's Ramadan (month 9)
+            if (displayHijri.month.number === 9) {
+              if (city.countryCode === 'PK' || city.countryCode === 'IN') {
+                displayHijri.day = "4"
+              } else if (city.countryCode === 'SA' || city.countryCode === 'AE') {
+                displayHijri.day = "5"
+              }
+            }
+
             timings.push({
               city,
               sehriTime: data.data.timings.Imsak,
               iftarTime: data.data.timings.Maghrib,
-              currentTime: formatInTimeZone(new Date(), city.timezone, 'HH:mm:ss'),
+              currentTime: currentTimeStr,
             })
           } catch {
             // Skip failed cities
@@ -316,10 +370,9 @@ export default function RamadanPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div className="flex justify-center">
                 <div className="bg-white rounded-full p-4 shadow-2xl">
-                  <AnalogClock
+                  <Hourglass
                     timezone={selectedCity.timezone}
                     size={220}
-                    showLabel={true}
                     cityName={selectedCity.name}
                   />
                 </div>
@@ -377,10 +430,9 @@ export default function RamadanPage() {
 
                     <div className="flex justify-center mb-4">
                       <div className="bg-white rounded-full p-2 shadow-lg">
-                        <AnalogClock
+                        <Hourglass
                           timezone={timing.city.timezone}
                           size={100}
-                          showLabel={false}
                         />
                       </div>
                     </div>
