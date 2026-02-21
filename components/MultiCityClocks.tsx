@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Plus, X, Clock } from 'lucide-react'
 import { formatInTimeZone } from 'date-fns-tz'
 import { City, allCities, defaultCity } from '@/lib/cities'
-import { AnalogClock } from './AnalogClock'
+import { Hourglass } from './Hourglass'
 import { Modal } from './ui/Modal'
 
 interface MultiCityClocksProps {
@@ -80,7 +80,7 @@ export function MultiCityClocks({
         )}
       </div>
 
-      <div className={`flex gap-4 overflow-x-auto pb-4 scrollbar-hide ${compact ? '' : 'flex-wrap'}`}>
+      <div className={`flex gap-4 overflow-x-auto pb-4 scrollbar-hide ${compact ? '' : 'flex-wrap'}`}> 
         <AnimatePresence>
           {cities.map((city) => (
             <motion.div
@@ -108,7 +108,7 @@ export function MultiCityClocks({
 
               {showAnalog && !compact && (
                 <div className="flex justify-center mb-3">
-                  <AnalogClock
+                  <Hourglass
                     timezone={city.timezone}
                     size={120}
                     showLabel={false}
