@@ -1,0 +1,99 @@
+Act as an expert Flutter developer. Your task is to build a high-end, premium Islamic Android application named "NoorWeb" (نور ویب), based on its existing Next.js web implementation.
+
+### 🌟 Project Vision & Branding
+- **Name:** NoorWeb - Your Complete Islamic Companion.
+- **Tone:** Professional, spiritual, cinematic, and premium.
+- **Design System:**
+  - **Primary Color:** #0e7a6e (Emerald/Sea Green)
+  - **Accent Color:** #C8A951 (Gold)
+  - **Backgrounds:** Clean white for light mode, deep charcoal/navy for dark mode.
+  - **Typography:** 
+    - Arabic: Amiri
+    - Urdu: Noto Nastaliq Urdu
+    - English: Inter/Roboto
+  - **Visuals:** Use high-quality icons (Lucide/Material), smooth micro-animations (Lottie or Flutter Animate), and 3D-like effects.
+
+### 🛠 Tech Stack Requirements
+- **Framework:** Flutter (Android focused).
+- **State Management:** Provider or BLoC.
+- **Storage:** Hive or SharedPreferences (for city settings, bookmarks, and local user sessions).
+- **Networking:** Dio or Http for API calls.
+
+### 📱 Core Features & Functionality
+
+1. **Cinematic Landing & Explore:**
+   - A visual walkthrough or "Section Explorer" showing high-quality images/3D renders of Islamic themes.
+   - Smooth transitions between feature highlights.
+
+2. **Quran Majeed (قرآن مجید):**
+   - Complete Quran text using AlQuran Cloud API.
+   - Urdu translation capability.
+   - Search functionality and Bookmarking system.
+   - Reading mode with adjustable font sizes.
+
+3. **Prayer Times & Countdown (اوقاتِ نماز):**
+   - Integration with AlAdhan API (https://api.aladhan.com/v1/).
+   - User city/country selection with auto-detection (Geolocator).
+   - Real-time countdown to the next prayer (Fajr, Dhuhr, Asr, Maghrib, Isha).
+   - Monthly prayer schedule view.
+
+4. **Ramadan System:**
+   - Dedicated countdown for Sehri and Iftar.
+   - Accurate timings based on the selected city.
+
+5. **Hadith (احادیث):**
+   - Fetch authentic Hadith using the FawazAhmed CDN API (https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1).
+   - Support for multiple books and Urdu/Arabic translations.
+
+6. **Digital Tasbeeh (تسبیح):**
+   - A large, aesthetic "Tap" button with haptic feedback (vibration on tap).
+   - Presets for common adhkar (SubhanAllah, Alhamdulillah, Allahu Akbar - 33/34 cycles).
+   - Cycle completion vibration (different pattern).
+   - Reset and Total Count tracking.
+
+7. **Prophet Stories (انبیاء کی کہانیاں):**
+   - A list of stories of the Prophets (Adam AS, Nuh AS, Ibrahim AS, etc.).
+   - Bilingual support: English and Urdu translations side-by-side or togglable.
+   - Accordion-style or clean detail view.
+
+8. **Additional Utilities:**
+   - **99 Names:** Beautiful list of Asma-ul-Husna with meanings.
+   - **Zakat Calculator:** Simple input-based calculator for wealth/gold/silver.
+   - **Qibla Finder:** Native compass integration to show Qibla direction.
+   - **Islamic Calendar:** Hijri date conversion and important dates list.
+
+### 🌐 API Integration Details
+- **Prayer Times:** `https://api.aladhan.com/v1/timingsByCity?city={city}&country={country}&method=2`
+- **Quran:** `https://api.alquran.cloud/v1/quran/ur.jalandhry` (or similar)
+- **Hadith:** `https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/info.json`
+
+### 🏗 Architecture Guidance
+- **Models:** Clean data classes for Surah, Ayah, Hadith, PrayerTimes, etc.
+- **Services:** Dedicated classes for API communication.
+- **Localization:** Robust RTL support for Urdu/Arabic and LTR for English.
+- **UI:** Custom widgets for Prayer Cards, Quran Ayahs, and the Tasbeeh counter.
+
+---
+
+### 📄 Project Data Reference (For Initial Content)
+
+#### Tasbeeh Adhkar List:
+- SubhanAllah (33)
+- Alhamdulillah (33)
+- Allahu Akbar (34)
+- Custom/Free (Infinity)
+
+#### Prophet Stories (Bilingual):
+1. **Prophet Adam (AS):** The creation from clay, prostration of angels, Iblis's refusal, the forbidden tree, and descent to Earth.
+2. **Prophet Nuh (AS):** 950 years of preaching, building the Ark, the Great Flood, and Mount Judi.
+3. **Prophet Ibrahim (AS):** Realization of One God, destroying idols, the fire of Nimrod, and rebuilding the Kaaba with Ismail (AS).
+
+#### Features Icons/Modules:
+- Quran, Prayer Times, Ramadan, Hadith, 99 Names, Qibla, Duas, 3D Kaaba, Zakat, Calendar, Blog, Tasbeeh, Stories.
+
+#### Sample Testimonials:
+- "This app changed my life" - Ahmed Ali
+- "Best Islamic app ever" - Fatima Khan
+- "Easy to use and very helpful" - Muhammad Umar
+
+Build this app with a focus on buttery-smooth performance and a "wow" factor in every transition.

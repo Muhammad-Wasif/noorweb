@@ -1,0 +1,25 @@
+NoorWeb Project - API Information
+================================
+
+This project currently uses the following APIs. None of these APIs require a secret API key as they are public and free to use.
+
+1. Prayer Times API
+   - Source: https://aladhan.com/prayer-times-api
+   - Endpoint: https://api.aladhan.com/v1/
+   - Saved in: lib/prayerApi.ts
+
+2. Al-Quran Cloud API
+   - Source: https://alquran.cloud/api
+   - Endpoint: https://api.alquran.cloud/v1/
+   - Saved in: lib/quranApi.ts
+
+3. Hadith API (CDN)
+   - Source: https://github.com/fawazahmed0/hadith-api
+   - Endpoint: https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1
+   - Saved in: app/hadith/page.tsx (used directly for fetching book data)
+
+4. Mock Authentication System
+   - Location: lib/context/AuthContext.tsx
+   - Description: Uses browser localStorage for user session management. No external API key is currently used for Google or Email services.
+
+Note: Although '@emailjs/browser' and 'next-auth' are listed in package.json, they are not currently configured with any active API keys or secrets in the codebase.

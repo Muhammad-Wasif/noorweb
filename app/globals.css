@@ -1,0 +1,302 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #0e7a6e;
+  --primary-light: #e6f7f5;
+  --primary-dark: #0a5c52;
+  --gold: #C8A951;
+  --gold-light: #f5e6b3;
+  --card: #f0faf8;
+  --glow: rgba(14, 122, 110, 0.3);
+}
+
+.dark {
+  --primary-light: #0a3d38;
+  --card: #1a2e2b;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply font-inter text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-900;
+  }
+  
+  .rtl {
+    direction: rtl;
+    text-align: right;
+  }
+  
+  .ltr {
+    direction: ltr;
+    text-align: left;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-6 py-3 bg-primary text-white rounded-full font-medium 
+           hover:bg-primary-dark transition-all duration-300 
+           hover:shadow-lg hover:shadow-primary/30;
+  }
+  
+  .btn-outline {
+    @apply px-6 py-3 border-2 border-primary text-primary rounded-full font-medium 
+           hover:bg-primary hover:text-white transition-all duration-300;
+  }
+  
+  .btn-gold {
+    @apply px-6 py-3 bg-gold text-white rounded-full font-medium 
+           hover:bg-gold-light hover:text-gold transition-all duration-300;
+  }
+  
+  .card-hover {
+    @apply rounded-2xl bg-white dark:bg-gray-800 shadow-md 
+           hover:-translate-y-1 hover:shadow-xl transition-all duration-300;
+  }
+  
+  .glass {
+    @apply bg-white/10 backdrop-blur-md backdrop-saturate-150 
+           border border-white/20;
+  }
+  
+  .glass-dark {
+    @apply bg-black/10 backdrop-blur-md backdrop-saturate-150 
+           border border-black/10;
+  }
+  
+  .glow-border {
+    @apply animate-pulse-glow rounded-2xl;
+  }
+  
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary to-gold bg-clip-text text-transparent;
+  }
+  
+  .arabic-text {
+    @apply font-amiri text-xl sm:text-2xl md:text-3xl leading-[2] rtl;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+  
+  .urdu-text {
+    @apply font-nastaliq text-base sm:text-lg md:text-xl leading-[2] rtl;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+  
+  .english-text {
+    @apply font-inter text-base sm:text-lg leading-relaxed ltr;
+  }
+  
+  .text-scalable {
+    @apply text-sm sm:text-base md:text-lg;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+  }
+  
+  .text-scalable-sm {
+    @apply text-xs sm:text-sm md:text-base;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+  
+  .text-scalable-lg {
+    @apply text-base sm:text-lg md:text-xl lg:text-2xl;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+  
+  .heading-scalable {
+    @apply text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+  
+  .section-padding {
+    @apply px-4 md:px-8 lg:px-16 py-12 md:py-20;
+  }
+  
+  .input-field {
+    @apply w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 
+           bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 
+           focus:ring-primary focus:border-transparent transition-all duration-200;
+  }
+  
+  .input-error {
+    @apply border-red-500 focus:ring-red-500;
+  }
+  
+  .error-text {
+    @apply text-red-500 text-sm mt-1 rtl font-nastaliq;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .geometric-bg {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%230e7a6e' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  
+  .gold-separator::after {
+    content: '۝';
+    @apply mx-2 text-gold;
+  }
+}
+
+/* Custom scrollbar for light mode */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-gray-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-primary/50 rounded-full hover:bg-primary;
+}
+
+/* Three.js canvas container */
+.canvas-container {
+  @apply w-full relative;
+  aspect-ratio: 16/9;
+}
+
+@media (min-width: 768px) {
+  .canvas-container {
+    aspect-ratio: 4/3;
+  }
+}
+
+/* Spinner for 3D model loading */
+.spinner {
+  @apply w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin;
+}
+
+/* Password strength bar */
+.strength-bar {
+  @apply h-1 rounded-full transition-all duration-300;
+}
+
+.strength-weak {
+  @apply bg-red-500 w-1/4;
+}
+
+.strength-medium {
+  @apply bg-orange-500 w-2/4;
+}
+
+.strength-strong {
+  @apply bg-green-500 w-full;
+}
+
+/* Clock styles */
+.clock-hand {
+  transform-origin: 50% 100%;
+  transition: transform 0.5s cubic-bezier(0.4, 2.6, 0.6, 1);
+}
+
+.clock-face {
+  @apply rounded-full bg-white dark:bg-gray-800 shadow-xl;
+}
+
+/* Digital clock */
+.digital-clock {
+  @apply font-mono text-4xl md:text-6xl text-primary font-bold tracking-wider;
+}
+
+/* Navigation drawer overlay */
+.drawer-overlay {
+  @apply fixed inset-0 bg-black/50 backdrop-blur-sm z-40;
+}
+
+/* Ramadan shimmer effect */
+.ramadan-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(200, 169, 81, 0.3),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s linear infinite;
+}
+
+/* Prevent text overflow on all elements */
+.no-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Safe text containers that prevent blending */
+.text-container {
+  @apply relative block;
+  min-height: 1em;
+  line-height: 1.5;
+}
+
+/* Urdu/Arabic specific line height to prevent overlap */
+.urdu-container {
+  @apply relative block font-nastaliq rtl;
+  line-height: 2.2;
+  min-height: 2.2em;
+}
+
+.arabic-container {
+  @apply relative block font-amiri rtl;
+  line-height: 2.4;
+  min-height: 2.4em;
+}
+
+/* 3D Model full view container */
+.model-container {
+  @apply w-full h-full min-h-[300px] md:min-h-[400px] lg:min-h-[500px];
+}
+
+.model-container-sm {
+  @apply w-full h-full min-h-[200px] md:min-h-[280px];
+}
+
+.model-container-lg {
+  @apply w-full h-full min-h-[400px] md:min-h-[500px] lg:min-h-[600px];
+}
