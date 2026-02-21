@@ -38,7 +38,7 @@ export function SectionMenu() {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed top-4 left-4 z-40 p-3 bg-white dark:bg-gray-800 rounded-xl shadow-lg 
+        className="fixed top-4 left-4 z-50 p-3 bg-white dark:bg-gray-800 rounded-xl shadow-lg 
                    hover:shadow-xl transition-all duration-300 hover:scale-105"
         aria-label="Open menu"
       >
@@ -47,7 +47,7 @@ export function SectionMenu() {
 
       <button
         onClick={toggleLang}
-        className="fixed top-4 right-4 z-40 p-3 bg-white dark:bg-gray-800 rounded-xl shadow-lg 
+        className="fixed top-4 right-4 z-50 p-3 bg-white dark:bg-gray-800 rounded-xl shadow-lg 
                    hover:shadow-xl transition-all duration-300 hover:scale-105 md:hidden"
         aria-label="Toggle language"
       >
@@ -61,7 +61,7 @@ export function SectionMenu() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60]"
               onClick={() => setIsOpen(false)}
             />
 
@@ -70,7 +70,7 @@ export function SectionMenu() {
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="fixed top-0 left-0 h-full w-80 bg-white dark:bg-gray-900 z-50 
+              className="fixed top-0 left-0 h-full w-80 bg-white dark:bg-gray-900 z-[70] 
                          shadow-2xl overflow-y-auto scrollbar-hide"
             >
               <div className="p-6">
