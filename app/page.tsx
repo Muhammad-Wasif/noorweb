@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
 import { BookOpen, Clock, Moon, Star, Navigation, Calculator, BookMarked, HeartHandshake, ArrowRight, Play, Box, Calendar, Newspaper, CircleDot, BookHeart } from 'lucide-react'
@@ -199,9 +200,11 @@ export default function HomePage() {
               className="relative h-[300px] md:h-[380px] lg:h-[420px] flex items-center justify-center"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-gold/10 rounded-full blur-3xl opacity-50" />
-              <img
+              <Image
                 src="/quran-model-nobg.png"
                 alt="Holy Quran"
+                width={400}
+                height={400}
                 className="relative z-10 w-full max-w-[400px] object-contain drop-shadow-2xl"
               />
             </motion.div>

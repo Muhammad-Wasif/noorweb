@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
 import { Search, BookOpen, MapPin } from 'lucide-react'
@@ -87,9 +88,11 @@ export default function QuranPage() {
               className="relative flex items-center justify-center h-[300px] md:h-[400px]"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-gold/10 rounded-full blur-3xl opacity-50" />
-              <img
+              <Image
                 src="/quran-model-nobg.png"
                 alt="Holy Quran"
+                width={350}
+                height={350}
                 className="relative z-10 w-full max-w-[350px] object-contain drop-shadow-2xl"
               />
             </motion.div>
