@@ -111,7 +111,6 @@ export function MultiCityClocks({
                   <Hourglass
                     timezone={city.timezone}
                     size={120}
-                    showLabel={false}
                   />
                 </div>
               )}
