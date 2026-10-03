@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 Hello from main 
+=======
+Hello from branch 
+>>>>>>> feature-edit
