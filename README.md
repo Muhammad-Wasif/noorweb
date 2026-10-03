@@ -77,3 +77,5 @@ npm run dev
 
 MIT
 
+
+<p align="center">Lab 01 completed - Software Engineering Lab</p>
